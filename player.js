@@ -1,27 +1,4 @@
-
-function setChannels(){
-	if(emu){
-		var mask = 0;
-
-		if($("#ch1").attr("checked")!="checked")mask+=0x1;
-		if($("#ch2").attr("checked")!="checked")mask+=0x2;
-		if($("#ch3").attr("checked")!="checked")mask+=0x4;
-		if($("#ch4").attr("checked")!="checked")mask+=0x8;
-		if($("#ch5").attr("checked")!="checked")mask+=0x10;
-		if($("#ch6").attr("checked")!="checked")mask+=0x20;
-		if($("#ch7").attr("checked")!="checked")mask+=0x40;
-		if($("#ch8").attr("checked")!="checked")mask+=0x80;
-		//message(mask);
-		Module.ccall("gme_mute_voices", "number", ["number","number"], [emu, mask]);
-	}
-}
-
-function message(msg) {
-  console.log(msg);
-}
-
 function play(fileName,trackNo){
-  console.warn('play');
 	message("fileName:"+fileName);
 	message("trackNo:"+trackNo);
 	$("#permalink").html("<a href='?file="+escape(fileName)+"&track="+trackNo+"&q="+encodeURIComponent($("#search").val())+"'>permalink</a>");
@@ -163,7 +140,7 @@ function playDropped(filename, subtune){
 
 	if (Module.ccall("gme_start_track", "number", ["number", "number"], [emu, subtune]) != 0)
 		message("could not load track");
-	setChannels();
+//	setChannels();
 
 
 	return false;
@@ -218,7 +195,7 @@ function playMusicData(payload, subtune){
 
 		if (Module.ccall("gme_start_track", "number", ["number", "number"], [emu, subtune]) != 0)
 			message("could not load track");
-		setChannels();
+
 
 		var bufferSize = 1024 * 16;
 //		var bufferSize = 1024 * 4;
