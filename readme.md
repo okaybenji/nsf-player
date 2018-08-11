@@ -8,13 +8,22 @@ Include **libgme.js** and **index.js** in your project.
 <script src="libgme.js"></script>
 <script src="index.js></script>
 ```
+Create a player by calling `createNsfPlayer`.
+```
+const nsfPlayer = createNsfPlayer(); // An audio context is created for you.
+```
+Optionally, you can pass in your own audio context.
+```
+const ctx = new AudioContext();
+const nsfPlayer = createNsfPlayer(ctx);
+```
 NSF files may contain multiple tracks. Play a track by calling `play` and passing it the path to your NSF file and the index of the track you wish to hear. (Indexes start at 0 and go up.)
 ```
-play('./songs/smb.nsf', 0);
+nsfPlayer.play('./songs/smb.nsf', 0);
 ```
 Stop the music by calling `stop`.
 ```
-stop();
+nsfPlayer.stop();
 ```
 ## Notes
 This uses (and includes) libgme, A.K.A. Game_Music_Emu, a library for emulating video game music.
