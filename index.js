@@ -36,7 +36,7 @@ let ref;
 let emu;
 let node;
 
-const parse_metadata = ref => {
+const parseMetadata = ref => {
   let offset = 0;
 
   const read_int32 = () => {
@@ -77,7 +77,7 @@ const updateSongInfo = (filename, subtune) => {
    console.error('Could not load metadata.');
  }
 
-  const metadata = parse_metadata(Module.getValue(ref, '*'));
+  const metadata = parseMetadata(Module.getValue(ref, '*'));
 
   message('playing', filename, metadata);
 };
