@@ -1,25 +1,36 @@
-function play(fileName,trackNo){
-	message("fileName:"+fileName);
-	message("trackNo:"+trackNo);
-	$("#permalink").html("<a href='?file="+escape(fileName)+"&track="+trackNo+"&q="+encodeURIComponent($("#search").val())+"'>permalink</a>");
-	play_song(fileName,trackNo);
-	return false;
-}
+const play = (fileName, trackNo) => {
+  if(node){
+    node.disconnect();
+    node = null;
+  }
 
-function random(){
-	$.getJSON("rand.php?q="+encodeURIComponent($("#search").val()),function(json){
-		play("nsf/"+json.file,json.track);
-	});
-}
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', fileName, true);
+  xhr.responseType = 'arraybuffer';
+  xhr.onerror = (e) => {
+    message(e);
+  };
+  xhr.onload = function(e) {
+    if (this.status === 404){
+      message('not found');
+      return;
+    }
+    const payload = new Uint8Array(this.response);
+    playMusicData(payload, trackNo);
+    updateSongInfo(fileName, trackNo);
+  };
+  xhr.send();
+};
 
-function stop(){
-	node.disconnect();
-	if (Module.ccall("gme_delete", "number", ["number"], [emu]) != 0)
-		message("could not stop track");
-}
-function getFileExtension(filename){
-	return filename.substring(filename.lastIndexOf('.')+1, filename.length);
-}
+const stop = () => {
+  node.disconnect();
+  if (Module.ccall("gme_delete", "number", ["number"], [emu]) != 0) {
+    message("could not stop track");
+  }
+};
+//function getFileExtension(filename){
+//	return filename.substring(filename.lastIndexOf('.')+1, filename.length);
+//}
 
 function getFileName(filename){
 	return filename.substring(filename.lastIndexOf('/')+1, filename.length);
@@ -110,29 +121,6 @@ function buildTracksHTMLDropped(filename, tracks){
 var ref;
 var emu;
 var node;
-function play_song(filename, subtune) {
-
-	if(node){
-		node.disconnect();
-		node = null;
-	}
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", filename, true);
-	xhr.responseType = "arraybuffer";
-	xhr.onerror = function(e){
-		message(e);
-	};
-	xhr.onload = function(e) {
-		if(this.status == 404){
-			message("not found");
-			return;
-		}
-		var payload = new Uint8Array(this.response);
-		playMusicData(payload, subtune);
-		updateSongInfo(filename, subtune);
-	};
-	xhr.send();
-}
 
 function playDropped(filename, subtune){
 
