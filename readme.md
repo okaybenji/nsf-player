@@ -19,7 +19,11 @@ const nsfPlayer = createNsfPlayer(ctx);
 ```
 NSF files may contain multiple tracks. Play a track by calling `play` and passing it the path to your NSF file and the index of the track you wish to hear. (Indexes start at 0 and go up.)
 ```
-nsfPlayer.play('./songs/smb.nsf', 0);
+nsfPlayer.play('./songs/smb.nsf', 2);
+```
+If you just want to hear the first track, you don't have to pass an index.
+```
+nsfPlayer.play('./songs/smb.nsf');
 ```
 Stop the music by calling `stop`.
 ```
