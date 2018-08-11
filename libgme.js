@@ -93,10 +93,10 @@ else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
   }
   if (ENVIRONMENT_IS_WEB) {
     Module['print'] = function(x) {
-      console.log(x);
+      //console.log(x);
     };
     Module['printErr'] = function(x) {
-      console.log(x);
+      //console.log(x);
     };
     this['Module'] = Module;
   } else if (ENVIRONMENT_IS_WORKER) {

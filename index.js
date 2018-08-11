@@ -1,4 +1,5 @@
-const message = msg => console.log(msg);
+// Messages are disabled. Feel free to handle them however you like.
+const message = () => null;
 
 const play = (fileName, trackNo) => {
   if(node){
@@ -26,8 +27,8 @@ const play = (fileName, trackNo) => {
 
 const stop = () => {
   node.disconnect();
-  if (Module.ccall("gme_delete", "number", ["number"], [emu]) != 0) {
-    message("could not stop track");
+  if (Module.ccall('gme_delete', 'number', ['number'], [emu]) != 0) {
+    console.error('Failed to stop track.');
   }
 };
 
@@ -39,13 +40,13 @@ const parse_metadata = ref => {
   let offset = 0;
 
   const read_int32 = () => {
-     const value = Module.getValue(ref + offset, "i32");
+     const value = Module.getValue(ref + offset, 'i32');
      offset += 4;
      return value;
    };
 
    const read_string = () => {
-     const value = Module.Pointer_stringify(Module.getValue(ref + offset, "i8*"));
+     const value = Module.Pointer_stringify(Module.getValue(ref + offset, 'i8*'));
      offset += 4;
      return value;;
    }
@@ -70,29 +71,25 @@ const parse_metadata = ref => {
 };
 
 const updateSongInfo = (filename, subtune) => {
- const subtune_count = Module.ccall("gme_track_count", "number", ["number"], [emu]);
+ const subtune_count = Module.ccall('gme_track_count', 'number', ['number'], [emu]);
 
- if (Module.ccall("gme_track_info", "number", ["number", "number", "number"], [emu, ref, subtune]) != 0) {
-   console.error("could not load metadata");
+ if (Module.ccall('gme_track_info', 'number', ['number', 'number', 'number'], [emu, ref, subtune]) != 0) {
+   console.error('Could not load metadata.');
  }
 
- const metadata = parse_metadata(Module.getValue(ref, "*"));
-
- const element = document.getElementById("metadata");
+  const metadata = parse_metadata(Module.getValue(ref, '*'));
 
   message('playing', filename, metadata);
 };
 
 const playMusicData = (payload, subtune) => {
-  message("subtune:"+subtune);
-
   if (!window.AudioContext) {
     if (window.webkitAudioContext) {
       window.AudioContext = window.webkitAudioContext;
     } else if (window.mozAudioContext) {
       window.AudioContext = window.mozAudioContext;
     } else {
-      message("Web Audio API is not supported.");
+      message('Web Audio API is not supported.');
     }
   }
 
@@ -104,27 +101,27 @@ const playMusicData = (payload, subtune) => {
     return;
   }
 
-  ref = Module.allocate(1, "i32", Module.ALLOC_STATIC);
+  ref = Module.allocate(1, 'i32', Module.ALLOC_STATIC);
 
   const samplerate = ctx.sampleRate;
 
-  if (Module.ccall("gme_open_data", "number", ["array", "number", "number", "number"], [payload, payload.length, ref, samplerate]) != 0) {
-    console.error("gme_open_data failed.");
+  if (Module.ccall('gme_open_data', 'number', ['array', 'number', 'number', 'number'], [payload, payload.length, ref, samplerate]) != 0) {
+    console.error('gme_open_data failed.');
     return;
   }
 
-  emu = Module.getValue(ref, "i32");
+  emu = Module.getValue(ref, 'i32');
 
-  const subtune_count = Module.ccall("gme_track_count", "number", ["number"], [emu]);
+  const subtune_count = Module.ccall('gme_track_count', 'number', ['number'], [emu]);
 
-  Module.ccall("gme_ignore_silence", "number", ["number"], [emu, 1]);
+  Module.ccall('gme_ignore_silence', 'number', ['number'], [emu, 1]);
 
-  const voice_count = Module.ccall("gme_voice_count", "number", ["number"], [emu]);
-  message("Channel count: ", voice_count);
-  message("Track count: ", subtune_count);
+  const voice_count = Module.ccall('gme_voice_count', 'number', ['number'], [emu]);
+  message('Channel count: ', voice_count);
+  message('Track count: ', subtune_count);
 
-  if (Module.ccall("gme_start_track", "number", ["number", "number"], [emu, subtune]) != 0) {
-    message("could not load track");
+  if (Module.ccall('gme_start_track', 'number', ['number', 'number'], [emu, subtune]) != 0) {
+    console.error('Failed to load track.');
   }
 
   const bufferSize = 1024 * 16;
@@ -138,23 +135,23 @@ const playMusicData = (payload, subtune) => {
     node = ctx.createScriptProcessor(bufferSize, inputs, outputs);
   }
 
-  const buffer = Module.allocate(bufferSize * 2, "i32", Module.ALLOC_STATIC);
+  const buffer = Module.allocate(bufferSize * 2, 'i32', Module.ALLOC_STATIC);
 
   const INT16_MAX = Math.pow(2, 32) - 1;
 
   node.onaudioprocess = (e) => {
-    if (Module.ccall("gme_track_ended", "number", ["number"], [emu]) == 1) {
-        node.disconnect();
-        message("end of stream");
-        return;
+    if (Module.ccall('gme_track_ended', 'number', ['number'], [emu]) == 1) {
+      node.disconnect();
+      message('End of stream.');
+      return;
     }
 
     const channels = [e.outputBuffer.getChannelData(0), e.outputBuffer.getChannelData(1)];
 
-    const err = Module.ccall("gme_play", "number", ["number", "number", "number"], [emu, bufferSize * 2, buffer]);
+    const err = Module.ccall('gme_play', 'number', ['number', 'number', 'number'], [emu, bufferSize * 2, buffer]);
     for (var i = 0; i < bufferSize; i++) {
       for (var n = 0; n < e.outputBuffer.numberOfChannels; n++) {
-        channels[n][i] = Module.getValue(buffer + i * e.outputBuffer.numberOfChannels * 2 + n * 4, "i32") / INT16_MAX;
+        channels[n][i] = Module.getValue(buffer + i * e.outputBuffer.numberOfChannels * 2 + n * 4, 'i32') / INT16_MAX;
       }
     }
   }
