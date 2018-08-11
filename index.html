@@ -1,74 +1,12 @@
-
 <!DOCTYPE html>
 <html>
-<head>
-
-<script type="text/javascript" src="libgme.js"></script>
-<script type="text/javascript" src="player.js"></script>
-
-</head>
-<body>
-<div class="container">
-	<div class="row">
-		<div class="span12">
-			<canvas id="canvasTimeDomain" width="1024" height="32"></canvas><br/>
-			<canvas id="canvasFrequency" width="1024" height="64"></canvas><br/>
-			<canvas id="canvasSpectrogram" width="1024" height="256"></canvas>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="span8">
-			<h4>Audio Effects</h4>
-			Voices
-
-			<table>
-				<tr>
-					<td>Filter : </td>
-					<td colspan="2">
-						<label><input type="radio" name="filterType" onclick="filterSetup()" value="0">LowPass</label>
-						<label><input type="radio" name="filterType" onclick="filterSetup()" value="1">HighPass</label>
-						<label><input type="radio" name="filterType" onclick="filterSetup()" value="2">BandPass</label>
-						<label><input type="radio" name="filterType" onclick="filterSetup()" value="3">LowShelf</label>
-						<label><input type="radio" name="filterType" onclick="filterSetup()" value="4">HighShelf</label>
-						<label><input type="radio" name="filterType" onclick="filterSetup()" value="5">Peaking</label>
-						<label><input type="radio" name="filterType" onclick="filterSetup()" value="6">Notch</label>
-						<label><input type="radio" name="filterType" onclick="filterSetup()" value="7" checked>AllPass</label>
-					</td>
-				</tr>
-				<tr>
-					<td>Freq : </td>
-					<td><input type="range" min="100" max="20000" id="freq" size="10" onchange="filterSetup()" oninput="filterSetup()" value="5000" class="wideslider" /></td><td><div id="freqlabel">5000Hz</td>
-				</tr>
-				<tr>
-					<td>Q : </td><td><input type="range" min="0" max="50" step="0.1" id="q" size="10" onchange="filterSetup()" oninput="filterSetup()" value="5" /></td><td><div id="qlabel">5</td>
-				</tr>
-				<tr>
-					<td>Gain : </td><td><input type="range" min="-50" max="50" id="gain" size="10" onchange="filterSetup()" oninput="filterSetup()" value="0"  disabled/></td><td><div id="gainlabel">0</td>
-				</tr>
-			</table>
-
-			<h4>Console</h4>
-			<p>
-				<div id="message" class="console"></div>
-			</p>
-		</div>
-
-		<div class="span4">
-			<form>
-
-			</form>
-
-			<div id="result"></div>
-		</div>
-	</div>
-
-
-</div>
-<script type="text/javascript">
-  const songs = ['smb-2', 'smb-3', 'mega-man-2', 'bubble-bobble', 'final-fantasy', 'legend-of-zelda', 'punch-out', 'goodnight'];
-  const song = songs[Math.floor(Math.random() * songs.length)];
-  play(`./songs/${song}.nsf`, 0);
-</script>
-</body>
+  <head>
+    <script type="text/javascript" src="libgme.js"></script>
+    <script type="text/javascript" src="player.js"></script>
+    <script type="text/javascript">
+      const songs = ['smb-2', 'smb-3', 'mega-man-2', 'bubble-bobble', 'final-fantasy', 'legend-of-zelda', 'punch-out', 'goodnight'];
+      const song = songs[Math.floor(Math.random() * songs.length)];
+      play(`./songs/${song}.nsf`, 0);
+    </script>
+  </head>
 </html>
