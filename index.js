@@ -3,7 +3,7 @@ const createNsfPlayer = (audioContext) => {
   const message = () => null;
 
   const play = (fileName, trackNo) => {
-    if(node){
+    if (node) {
       node.disconnect();
       node = null;
     }
@@ -27,6 +27,10 @@ const createNsfPlayer = (audioContext) => {
   };
 
   const stop = () => {
+    if (!node) {
+      return;
+    }
+
     node.disconnect();
     if (Module.ccall('gme_delete', 'number', ['number'], [emu]) != 0) {
       console.error('Failed to stop track.');
