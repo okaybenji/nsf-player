@@ -5,7 +5,7 @@ This is a player for NSF-format Nintendo Entertainment System music files. It's 
 ## How to use it
 Include **libgme.js** and **index.js** in your project.
 ```
-<script src="libgme.js"></script>
+<script src="libgme/libgme.js"></script>
 <script src="index.js></script>
 ```
 Create a player by calling `createNsfPlayer`.
