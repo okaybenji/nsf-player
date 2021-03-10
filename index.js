@@ -15,7 +15,7 @@ const createNsfPlayer = (audioContext) => {
       message(e);
     };
     xhr.onload = function(e) {
-      if (this.status === 404){
+      if (this.status === 404) {
         message('not found');
         return;
       }
@@ -98,7 +98,7 @@ const createNsfPlayer = (audioContext) => {
       }
     }
 
-    try{
+    try {
       ctx = audioContext || new AudioContext();
     } catch(err) {
       console.error(`Unable to create AudioContext. Error: ${err}`);
